@@ -1,15 +1,15 @@
 {
-  "race_name": "British Grand Prix",
-  "country": "United Kingdom",
-  "location": "Silverstone",
-  "race_date": "2025-07-06T15:00:00+01:00",
-  "race_date_formatted": "Sunday, July 06, 2025 at 15:00",
+  "race_name": "Hungarian Grand Prix",
+  "country": "Hungary",
+  "location": "Budapest",
+  "race_date": "2025-08-03T15:00:00",
+  "race_date_formatted": "Sunday, August 03, 2025 at 15:00",
   "days_until": 2,
-  "hours_until": 30,
-  "minutes_until": 9,
+  "hours_until": 65,
+  "minutes_until": 41,
   "is_race_weekend": true,
   "is_race_day": false,
-  "qualifying_date": "2025-07-05T15:00:00+01:00",
-  "round_number": 12,
-  "last_updated": "2025-07-04T08:51:00"
+  "qualifying_date": "2025-08-02T16:00:00+02:00",
+  "round_number": 14,
+  "last_updated": "2025-07-31T21:18:57.279156"
 }

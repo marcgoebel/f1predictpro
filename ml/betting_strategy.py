@@ -25,7 +25,14 @@ def apply_betting_strategy(probabilities_df: pd.DataFrame, odds_dict: Dict[str, 
     Returns:
         DataFrame mit Wettempfehlungen
     """
-    from ml.value_bet_calculator import calculate_expected_value
+    from ml.enhanced_value_bet_calculator import EnhancedValueBetCalculator
+
+def calculate_expected_value(probability: float, odds: float, stake: float = 1.0) -> float:
+    """Calculate Expected Value (EV) of a bet"""
+    win_amount = odds * stake
+    lose_amount = stake
+    ev = (probability * win_amount) - ((1 - probability) * lose_amount)
+    return ev
     
     results = []
     
@@ -196,11 +203,26 @@ if __name__ == "__main__":
     RACE = "Spanish_Grand_Prix_full"
     
     prob_file = f"data/live/predicted_probabilities_{YEAR}_{RACE}.csv"
-    odds_file = "data/live/sample_odds.csv"
+    odds_file = "data/live/betpanda_odds.csv"
     
     # Erstelle Beispiel-Quoten falls nicht vorhanden
     if not os.path.exists(odds_file):
-        from ml.value_bet_calculator import create_sample_odds_file
+        # from ml.value_bet_calculator import create_sample_odds_file  # Deprecated
+        pass
+
+# Supabase Integration
+try:
+    from database.supabase_client import get_db_client
+    SUPABASE_AVAILABLE = True
+    db_client = get_db_client()
+except ImportError:
+    SUPABASE_AVAILABLE = False
+    db_client = None
+
+    # Define odds_file for fallback
+    odds_file = "data/live/sample_odds.csv"
+    if not os.path.exists(odds_file):
+        # from ml.value_bet_calculator import create_sample_odds_file  # Deprecated
         create_sample_odds_file(odds_file)
     
     # Verschiedene Strategien testen

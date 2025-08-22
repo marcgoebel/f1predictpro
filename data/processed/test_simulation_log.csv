@@ -1,0 +1,9 @@
+Race_Name,Driver,Quote,Predicted_Probability,EV,Actual_Position,Bet_Amount,Outcome,Profit_Loss,Success_Threshold
+2025 Spanish Grand Prix,NOR,20.0,6.09,2.79,3,10,WIN,190.0,3
+2025 Spanish Grand Prix,PIA,25.0,17.64,35.86,5,10,LOSS,-10.0,3
+2025 Spanish Grand Prix,NOR,20.0,63.65,123.66,3,10,WIN,190.0,3
+2025 Spanish Grand Prix,PIA,25.0,53.41,128.87,5,10,LOSS,-10.0,3
+2025 Spanish Grand Prix,LEC,6.0,30.92,11.64,2,10,WIN,50.0,3
+2025 Spanish Grand Prix,NOR,20.0,5.06,0.63,3,10,WIN,190.0,3
+2025 Spanish Grand Prix,RUS,8.0,12.94,1.65,4,10,LOSS,-10.0,3
+2025 Spanish Grand Prix,PIA,25.0,10.74,17.92,5,10,LOSS,-10.0,3

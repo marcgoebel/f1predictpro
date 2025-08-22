@@ -1,0 +1,44 @@
+{
+  "check_interval_minutes": 30,
+  "max_retries": 3,
+  "retry_delay_minutes": 5,
+  "data_sources": {
+    "fastf1": {
+      "enabled": true,
+      "priority": 1,
+      "cache_dir": "data/cache/fastf1"
+    },
+    "ergast": {
+      "enabled": true,
+      "priority": 2,
+      "base_url": "https://ergast.com/api/f1",
+      "rate_limit_delay": 1
+    },
+    "f1_official": {
+      "enabled": false,
+      "priority": 3,
+      "base_url": "https://api.formula1.com"
+    },
+    "openf1": {
+      "enabled": true,
+      "priority": 4,
+      "base_url": "https://api.openf1.org/v1",
+      "rate_limit_delay": 0.5,
+      "config_file": "config/openf1_config.json"
+    }
+  },
+  "output_paths": {
+    "incoming_results": "data/incoming_results",
+    "race_schedule": "data/live/race_schedule.json"
+  },
+  "monitoring": {
+    "check_hours_after_race": [
+      2,
+      4,
+      6,
+      12,
+      24
+    ],
+    "max_days_after_race": 7
+  }
+}

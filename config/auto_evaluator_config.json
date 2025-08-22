@@ -13,8 +13,8 @@
     "*race_results*.csv",
     "*actual*.csv"
   ],
-  "min_file_age_seconds": 30,
-  "enable_model_retraining": false,
+  "min_file_age_seconds": 0,
+  "enable_model_retraining": true,
   "model_retrain_threshold": 5,
   "notification_enabled": true
 }

@@ -1,10 +1,10 @@
 {
-  "race_name": "British Grand Prix",
+  "race_name": "Hungarian Grand Prix",
   "days": 2,
-  "hours": 6,
-  "minutes": 9,
-  "total_hours": 54,
+  "hours": 17,
+  "minutes": 41,
+  "total_hours": 65,
   "is_race_weekend": true,
   "is_race_day": false,
-  "last_updated": "2025-07-04T08:51:00"
+  "last_updated": "2025-07-31T21:18:57.280154"
 }

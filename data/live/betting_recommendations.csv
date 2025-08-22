@@ -1,31 +1,6 @@
-driver,position,odds,probability_pct,expected_value,meets_ev_criteria,meets_prob_criteria,meets_odds_criteria,bet_recommendation,stake,potential_profit
-PIA,P2,25.0,53.41,128.87,True,True,True,Ja,10.0,240.0
-NOR,P2,20.0,63.65,123.66,True,True,True,Ja,10.0,190.0
-PIA,P1,25.0,17.64,35.86,True,True,True,Ja,10.0,240.0
-PIA,P3,25.0,10.74,17.92,True,False,True,Nein,0.0,0.0
-LEC,P3,6.0,30.92,11.64,True,True,True,Ja,10.0,50.0
-NOR,P1,20.0,6.09,2.79,True,False,True,Nein,0.0,0.0
-RUS,P3,8.0,12.94,1.65,True,False,True,Nein,0.0,0.0
-NOR,P3,20.0,5.06,0.63,True,False,True,Nein,0.0,0.0
-HAM,P3,4.5,16.77,-0.78,False,True,True,Nein,0.0,0.0
-ALO,P3,12.0,4.67,-3.93,False,False,True,Nein,0.0,0.0
-VER,P1,1.8,18.99,-4.68,False,True,False,Nein,0.0,0.0
-GAS,P2,30.0,1.52,-5.29,False,False,True,Nein,0.0,0.0
-RUS,P2,8.0,4.64,-5.82,False,False,True,Nein,0.0,0.0
-GAS,P3,30.0,1.02,-6.84,False,False,True,Nein,0.0,0.0
-SAI,P2,15.0,1.64,-7.38,False,False,True,Nein,0.0,0.0
-VER,P2,1.8,7.82,-7.81,False,False,False,Nein,0.0,0.0
-HAM,P2,4.5,3.93,-7.84,False,False,True,Nein,0.0,0.0
-SAI,P3,15.0,1.33,-7.87,False,False,True,Nein,0.0,0.0
-ALO,P2,12.0,0.99,-8.71,False,False,True,Nein,0.0,0.0
-LEC,P2,6.0,1.45,-8.99,False,False,True,Nein,0.0,0.0
-VER,P3,1.8,3.0,-9.16,False,False,False,Nein,0.0,0.0
-OCO,P3,35.0,0.23,-9.17,False,False,True,Nein,0.0,0.0
-RUS,P1,8.0,0.84,-9.24,False,False,True,Nein,0.0,0.0
-OCO,P2,35.0,0.18,-9.35,False,False,True,Nein,0.0,0.0
-GAS,P1,30.0,0.12,-9.63,False,False,True,Nein,0.0,0.0
-SAI,P1,15.0,0.19,-9.7,False,False,True,Nein,0.0,0.0
-HAM,P1,4.5,0.34,-9.81,False,False,True,Nein,0.0,0.0
-OCO,P1,35.0,0.03,-9.89,False,False,True,Nein,0.0,0.0
-LEC,P1,6.0,0.07,-9.95,False,False,True,Nein,0.0,0.0
-ALO,P1,12.0,0.02,-9.97,False,False,True,Nein,0.0,0.0
+driver,odds,probability,implied_probability,edge,stake,expected_value,profit_potential,recommendation,bookmaker,last_updated
+Max Verstappen,2.1,0.55,0.47619047619047616,0.07380952380952388,6.71,1.04,7.38,CONSIDER,Betpanda,2025-08-21 08:33:52
+Lando Norris,3.2,0.4,0.3125,0.08750000000000002,3.98,1.11,8.75,CONSIDER,Betpanda,2025-08-21 08:33:52
+Charles Leclerc,4.5,0.28,0.2222222222222222,0.05777777777777782,1.65,0.43,5.78,CONSIDER,Betpanda,2025-08-21 08:33:52
+Oscar Piastri,6.0,0.22,0.16666666666666666,0.053333333333333344,1.07,0.34,5.33,CONSIDER,Betpanda,2025-08-21 08:33:52
+Carlos Sainz,8.5,0.15,0.11764705882352941,0.032352941176470584,0.43,0.12,3.24,CONSIDER,Betpanda,2025-08-21 08:33:52

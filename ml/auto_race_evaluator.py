@@ -8,7 +8,8 @@ import argparse
 import logging
 from pathlib import Path
 import json
-from bet_simulator import F1BetSimulator
+from ml.bet_simulator import F1BetSimulator
+from ml.prediction_accuracy_analyzer import PredictionAccuracyAnalyzer
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -266,6 +267,9 @@ class AutoRaceEvaluator:
             
             self.logger.info(f"✅ Successfully processed race: {race_name} (Profit: €{race_profit:.2f})")
             
+            # Führe Vorhersagegenauigkeits-Analyse durch
+            self.run_prediction_accuracy_analysis(race_name, temp_results_file)
+            
             # Trigger model retraining if enabled
             if self.config["enable_model_retraining"]:
                 self.check_model_retraining()
@@ -400,6 +404,86 @@ class AutoRaceEvaluator:
         # self.send_email_notification(message)
         # self.send_slack_notification(message)
     
+    def run_prediction_accuracy_analysis(self, race_name: str, result_file: str):
+        """
+        Führt detaillierte Vorhersagegenauigkeits-Analyse durch
+        """
+        try:
+            self.logger.info(f"Starte Vorhersagegenauigkeits-Analyse für {race_name}...")
+            
+            # Initialisiere Accuracy Analyzer
+            analyzer = PredictionAccuracyAnalyzer()
+            
+            # Finde entsprechende Vorhersagedatei
+            prediction_file = self.find_prediction_file(race_name)
+            
+            if prediction_file and os.path.exists(prediction_file):
+                # Führe Analyse durch
+                analysis_result = analyzer.analyze_race_predictions(
+                    prediction_file, result_file, race_name
+                )
+                
+                if analysis_result:
+                    # Speichere Analyseergebnisse
+                    analyzer.save_analysis_results()
+                    
+                    # Generiere Bericht
+                    report_file = f"data/analysis/accuracy_report_{race_name.replace(' ', '_')}.txt"
+                    analyzer.generate_comprehensive_report(report_file)
+                    
+                    # Erstelle Visualisierung
+                    viz_file = f"data/analysis/accuracy_viz_{race_name.replace(' ', '_')}.png"
+                    analyzer.create_visualization(viz_file)
+                    
+                    # Zeige wichtige Metriken
+                    overall_score = analysis_result['overall_score']
+                    exact_acc = analysis_result['position_accuracy']['exact_accuracy']
+                    
+                    self.logger.info(f"Vorhersagegenauigkeit für {race_name}:")
+                    self.logger.info(f"   Gesamt-Score: {overall_score:.1%}")
+                    self.logger.info(f"   Exakte Genauigkeit: {exact_acc:.1%}")
+                    self.logger.info(f"   Bericht: {report_file}")
+                    self.logger.info(f"   Visualisierung: {viz_file}")
+                    
+                    # Prüfe ob Modell-Verbesserung nötig ist
+                    if overall_score < 0.5:
+                        self.logger.warning(f"Niedrige Vorhersagegenauigkeit ({overall_score:.1%}) - Modell-Überarbeitung empfohlen")
+                    elif overall_score > 0.8:
+                        self.logger.info(f"Ausgezeichnete Vorhersagegenauigkeit ({overall_score:.1%})!")
+                    
+                else:
+                    self.logger.error(f"Fehler bei der Vorhersageanalyse für {race_name}")
+            else:
+                self.logger.warning(f"Keine Vorhersagedatei gefunden für {race_name}")
+                
+        except Exception as e:
+            self.logger.error(f"Fehler bei der Vorhersageanalyse: {e}")
+    
+    def find_prediction_file(self, race_name: str) -> str:
+        """
+        Findet die entsprechende Vorhersagedatei für ein Rennen
+        """
+        # Normalisiere Rennnamen für Dateisuche
+        race_name_clean = race_name.replace(' ', '_').replace('Grand_Prix', 'Grand_Prix')
+        
+        # Suche in verschiedenen Verzeichnissen
+        search_patterns = [
+            f"data/live/predicted_probabilities_*{race_name_clean}*_full.csv",
+            f"data/live/predicted_probabilities_{race_name_clean}_full.csv",
+            f"data/processed/predicted_probabilities_*{race_name_clean}*.csv",
+            f"data/live/*{race_name_clean}*probabilities*.csv"
+        ]
+        
+        for pattern in search_patterns:
+            files = glob.glob(pattern)
+            if files:
+                # Nimm die neueste Datei
+                latest_file = max(files, key=os.path.getmtime)
+                self.logger.info(f"Gefundene Vorhersagedatei: {latest_file}")
+                return latest_file
+        
+        return None
+    
     def check_model_retraining(self):
         """
         Check if model retraining should be triggered
@@ -410,6 +494,18 @@ class AutoRaceEvaluator:
             self.logger.info(f"Triggering model retraining after {len(self.processed_races)} races")
             # Here you would call your model retraining script
             # self.trigger_model_retraining()
+            
+        # Zusätzlich: Prüfe Accuracy Analyzer Ergebnisse
+        try:
+            accuracy_history_file = "data/analysis/accuracy_history.csv"
+            if os.path.exists(accuracy_history_file):
+                acc_df = pd.read_csv(accuracy_history_file)
+                if len(acc_df) >= 3:
+                    recent_overall_scores = acc_df.tail(3)['overall_score'].mean()
+                    if recent_overall_scores < 0.5:
+                        self.logger.warning(f"Vorhersagegenauigkeit kritisch niedrig ({recent_overall_scores:.1%}). Dringendes Retraining erforderlich!")
+        except Exception as e:
+            self.logger.error(f"Error checking accuracy history: {e}")
     
     def run_single_check(self):
         """

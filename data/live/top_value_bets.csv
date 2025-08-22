@@ -1,4 +1,6 @@
-driver,odds,probability_pct,expected_value,bet_recommendation,potential_profit,ev_formatted,odds_formatted,probability_formatted,potential_profit_formatted
-Lando Norris,3.2,35.0,0.12,BET,22.0,0.120,3.20,35.0%,€22.00
-Oscar Piastri,6.0,20.0,0.2,BET,50.0,0.200,6.00,20.0%,€50.00
-Charles Leclerc,4.5,25.0,0.125,BET,35.0,0.125,4.50,25.0%,€35.00
+driver,odds,probability,expected_value,profit_potential,recommendation
+Lando Norris,3.2,0.4,1.11,8.75,CONSIDER
+Max Verstappen,2.1,0.55,1.04,7.38,CONSIDER
+Charles Leclerc,4.5,0.28,0.43,5.78,CONSIDER
+Oscar Piastri,6.0,0.22,0.34,5.33,CONSIDER
+Carlos Sainz,8.5,0.15,0.12,3.24,CONSIDER

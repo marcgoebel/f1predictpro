@@ -1,3 +1,11 @@
-[
-  "monaco_gp_results.csv"
-]
+{
+  "last_updated": "2025-07-29T16:14:38.702985",
+  "processed_files": [
+    "monaco_gp_results.csv",
+    "spanish_gp_2025_results_20250706_171102.csv",
+    "british_gp_2025_results.csv",
+    "2025_13_belgian_grand_prix",
+    "spanish_gp_2025_results_20250706_170230.csv",
+    "british_gp_2025_results_corrected.csv"
+  ]
+}

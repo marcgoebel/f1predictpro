@@ -1,0 +1,42 @@
+{
+  "total_bets": 5,
+  "total_stake": 13.84,
+  "expected_profit": 3.04,
+  "recommendations": [
+    {
+      "driver": "Max Verstappen",
+      "odds": 2.1,
+      "stake": 6.71,
+      "expected_value": 1.04,
+      "recommendation": "CONSIDER"
+    },
+    {
+      "driver": "Lando Norris",
+      "odds": 3.2,
+      "stake": 3.98,
+      "expected_value": 1.11,
+      "recommendation": "CONSIDER"
+    },
+    {
+      "driver": "Charles Leclerc",
+      "odds": 4.5,
+      "stake": 1.65,
+      "expected_value": 0.43,
+      "recommendation": "CONSIDER"
+    },
+    {
+      "driver": "Oscar Piastri",
+      "odds": 6.0,
+      "stake": 1.07,
+      "expected_value": 0.34,
+      "recommendation": "CONSIDER"
+    },
+    {
+      "driver": "Carlos Sainz",
+      "odds": 8.5,
+      "stake": 0.43,
+      "expected_value": 0.12,
+      "recommendation": "CONSIDER"
+    }
+  ]
+}

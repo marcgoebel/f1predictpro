@@ -1,0 +1,9 @@
+[
+  {
+    "type": "calibration_warning",
+    "race": "2025 Spanish Grand Prix",
+    "message": "Schlechte Wahrscheinlichkeits-Kalibrierung (Fehler: 0.34). Wahrscheinlichkeiten sind unzuverlässig.",
+    "priority": "medium",
+    "suggested_action": "probability_recalibration"
+  }
+]

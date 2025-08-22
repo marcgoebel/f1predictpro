@@ -4,15 +4,15 @@ import time
 import schedule
 import logging
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import fastf1
 from pathlib import Path
 
 # Import our existing modules
-from betting_strategy import generate_betting_recommendations
-from predict_live_race import predict_race_probabilities
-from auto_race_evaluator import AutoRaceEvaluator
-from odds_fetcher import fetch_live_odds
+from ml.betting_strategy import generate_betting_recommendations
+from ml.auto_race_evaluator import AutoRaceEvaluator
+from ml.betpanda_odds_fetcher import BetpandaOddsFetcher
+from ml.auto_race_results_fetcher import AutoRaceResultsFetcher
 
 class AutoF1RaceMonitor:
     """
@@ -29,6 +29,7 @@ class AutoF1RaceMonitor:
         self.config = self.load_config()
         self.setup_logging()
         self.race_evaluator = AutoRaceEvaluator()
+        self.results_fetcher = AutoRaceResultsFetcher()
         
     def load_config(self):
         """Load configuration or create default"""
@@ -130,12 +131,18 @@ class AutoF1RaceMonitor:
                 with open(schedule_file, 'r') as f:
                     races = json.load(f)
             
-            now = datetime.now()
+            now = datetime.now(timezone.utc)
             upcoming_races = []
             
             for race in races:
                 if race['race_date']:
                     race_time = datetime.fromisoformat(race['race_date'].replace('Z', '+00:00'))
+                    # Convert to UTC for comparison
+                    if race_time.tzinfo is None:
+                        race_time = race_time.replace(tzinfo=timezone.utc)
+                    else:
+                        race_time = race_time.astimezone(timezone.utc)
+                    
                     if race_time > now:
                         upcoming_races.append((race, race_time))
             
@@ -152,7 +159,12 @@ class AutoF1RaceMonitor:
     
     def should_fetch_odds(self, race_time):
         """Check if we should fetch odds based on time before race"""
-        now = datetime.now()
+        now = datetime.now(timezone.utc)
+        # Ensure race_time is timezone-aware
+        if race_time.tzinfo is None:
+            race_time = race_time.replace(tzinfo=timezone.utc)
+        else:
+            race_time = race_time.astimezone(timezone.utc)
         hours_until_race = (race_time - now).total_seconds() / 3600
         
         fetch_times = self.config['odds_fetch_hours_before_race']
@@ -166,7 +178,12 @@ class AutoF1RaceMonitor:
     
     def should_generate_predictions(self, race_time):
         """Check if we should generate predictions"""
-        now = datetime.now()
+        now = datetime.now(timezone.utc)
+        # Ensure race_time is timezone-aware
+        if race_time.tzinfo is None:
+            race_time = race_time.replace(tzinfo=timezone.utc)
+        else:
+            race_time = race_time.astimezone(timezone.utc)
         hours_until_race = (race_time - now).total_seconds() / 3600
         
         prediction_time = self.config['prediction_hours_before_race']
@@ -174,7 +191,12 @@ class AutoF1RaceMonitor:
     
     def should_process_results(self, race_time):
         """Check if we should process race results"""
-        now = datetime.now()
+        now = datetime.now(timezone.utc)
+        # Ensure race_time is timezone-aware
+        if race_time.tzinfo is None:
+            race_time = race_time.replace(tzinfo=timezone.utc)
+        else:
+            race_time = race_time.astimezone(timezone.utc)
         hours_after_race = (now - race_time).total_seconds() / 3600
         
         process_time = self.config['auto_process_results_hours_after_race']
@@ -186,7 +208,8 @@ class AutoF1RaceMonitor:
             self.logger.info(f"Fetching live odds for {race_name}")
             
             # Use our existing odds fetcher
-            odds_data = fetch_live_odds(race_name)
+            odds_fetcher = BetpandaOddsFetcher()
+            odds_data = odds_fetcher.fetch_odds(use_sample_data=True)
             
             if odds_data is not None and not odds_data.empty:
                 odds_file = self.config['data_paths']['live_odds']
@@ -213,7 +236,9 @@ class AutoF1RaceMonitor:
             self.logger.info(f"Generating predictions for {race_name}")
             
             # Use our existing prediction system
-            predictions = predict_race_probabilities(race_name)
+            # Note: predict_live_race.py is a script, not a function
+            # We'll need to run it as a subprocess or refactor it
+            predictions = None  # Placeholder - needs implementation
             
             if predictions is not None and not predictions.empty:
                 pred_file = self.config['data_paths']['predictions']
@@ -286,7 +311,12 @@ class AutoF1RaceMonitor:
         try:
             self.logger.info(f"Auto-processing results for {race_name}")
             
-            # Use our existing race evaluator
+            # First, try to fetch new race results automatically
+            new_results = self.results_fetcher.check_for_new_results()
+            if new_results > 0:
+                self.logger.info(f"Fetched {new_results} new race result files")
+            
+            # Then process any available results
             processed = self.race_evaluator.run_single_check()
             
             if processed > 0:
@@ -315,10 +345,73 @@ class AutoF1RaceMonitor:
         except Exception as e:
             self.logger.error(f"Error sending notification: {e}")
     
+    def check_and_process_past_races(self):
+        """Check for past races that haven't been processed yet"""
+        try:
+            # Load race schedule
+            schedule_file = self.config['data_paths']['race_schedule']
+            if not os.path.exists(schedule_file):
+                return
+            
+            with open(schedule_file, 'r') as f:
+                races = json.load(f)
+            
+            # Load processed races
+            processed_file = self.config['data_paths']['processed_races']
+            processed_races = set()
+            if os.path.exists(processed_file):
+                with open(processed_file, 'r') as f:
+                    processed_data = json.load(f)
+                    # Extract race names from filenames
+                    for filename in processed_data:
+                        if 'belgian' in filename.lower():
+                            processed_races.add('Belgian Grand Prix')
+                        elif 'british' in filename.lower():
+                            processed_races.add('British Grand Prix')
+                        elif 'spanish' in filename.lower():
+                            processed_races.add('Spanish Grand Prix')
+                        elif 'monaco' in filename.lower():
+                            processed_races.add('Monaco Grand Prix')
+                        elif 'canadian' in filename.lower():
+                            processed_races.add('Canadian Grand Prix')
+                        elif 'austrian' in filename.lower():
+                            processed_races.add('Austrian Grand Prix')
+                        elif 'hungarian' in filename.lower():
+                            processed_races.add('Hungarian Grand Prix')
+            
+            now = datetime.now(timezone.utc)
+            
+            # Check each race
+            for race in races:
+                if race['race_date']:
+                    race_time = datetime.fromisoformat(race['race_date'].replace('Z', '+00:00'))
+                    if race_time.tzinfo is None:
+                        race_time = race_time.replace(tzinfo=timezone.utc)
+                    else:
+                        race_time = race_time.astimezone(timezone.utc)
+                    
+                    # Check if race is in the past and not processed
+                    hours_after_race = (now - race_time).total_seconds() / 3600
+                    race_name = race['race_name']
+                    
+                    # Process if race finished more than 2 hours ago and not yet processed
+                    if hours_after_race > 2 and race_name not in processed_races:
+                        self.logger.info(f"Found unprocessed past race: {race_name}")
+                        if self.process_race_results_auto(race_name):
+                            self.logger.info(f"✅ Successfully processed past race: {race_name}")
+                        else:
+                            self.logger.warning(f"⚠️ Failed to process past race: {race_name}")
+            
+        except Exception as e:
+            self.logger.error(f"Error checking past races: {e}")
+    
     def run_monitoring_cycle(self):
         """Run one complete monitoring cycle"""
         try:
             self.logger.info("🔄 Starting monitoring cycle")
+            
+            # Check for unprocessed past races first
+            self.check_and_process_past_races()
             
             # Get next race
             next_race, race_time = self.get_next_race()

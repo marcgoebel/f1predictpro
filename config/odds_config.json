@@ -1,0 +1,46 @@
+{
+  "data_source": "betpanda_scraper",
+  "_comment_data_source": "Options: 'test_data', 'stake_scraper', 'betpanda_scraper', 'odds_api', 'enhanced_api'",
+  "test_data": {
+    "enabled": false,
+    "update_interval_minutes": 30
+  },
+  "stake_scraper": {
+    "enabled": true,
+    "url": "https://stake.com/sports/formula-1",
+    "update_interval_minutes": 60,
+    "max_retries": 3
+  },
+  "betpanda_scraper": {
+    "enabled": true,
+    "url": "https://www.betpanda.com/de/sport/motorsport/formel-1",
+    "update_interval_minutes": 60,
+    "max_retries": 3
+  },
+  "odds_api": {
+    "enabled": false,
+    "api_key_env_var": "ODDS_API_KEY",
+    "base_url": "https://api.the-odds-api.com/v4",
+    "update_interval_minutes": 30,
+    "regions": "eu,us,au",
+    "markets": "h2h"
+  },
+  "enhanced_api": {
+    "enabled": false,
+    "api_key_env_var": "ODDS_API_KEY",
+    "store_in_supabase": true,
+    "update_interval_minutes": 30
+  },
+  "auto_update": {
+    "enabled": true,
+    "check_interval_hours": 6,
+    "fetch_hours_before_race": [
+      72,
+      48,
+      24,
+      12,
+      6,
+      2
+    ]
+  }
+}

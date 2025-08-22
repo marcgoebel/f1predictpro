@@ -1,0 +1,10 @@
+{
+  "prediction_files_pattern": "data/live/predicted_probabilities_*_full.csv",
+  "results_files_pattern": "data/incoming_results/*.csv",
+  "output_directory": "data/analysis",
+  "accuracy_threshold": 0.7,
+  "learning_log_file": "data/analysis/learning_insights.json",
+  "accuracy_history_file": "data/analysis/accuracy_history.csv",
+  "error_patterns_file": "data/analysis/error_patterns.json",
+  "improvement_suggestions_file": "data/analysis/improvement_suggestions.txt"
+}

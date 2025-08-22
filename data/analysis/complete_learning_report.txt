@@ -1,0 +1,75 @@
+# F1 PREDICTION ACCURACY ANALYSIS REPORT
+Generated: 2025-07-30 08:58:41
+
+============================================================
+
+## ZUSAMMENFASSUNG
+- Analysierte Rennen: 5
+- Durchschnittlicher Genauigkeitsscore: 20.6%
+
+## DETAILLIERTE ERGEBNISSE
+
+### 2025 Spanish Grand Prix
+- Gesamt-Score: 24.8%
+- Exakte Genauigkeit: 5.0%
+- Genauigkeit ±3 Positionen: 25.0%
+- Top-3 Genauigkeit: 25.0%
+- Durchschnittlicher Positionsfehler: 6.8
+
+### 2025 Monaco Grand Prix
+- Gesamt-Score: 33.0%
+- Exakte Genauigkeit: 10.0%
+- Genauigkeit ±3 Positionen: 30.0%
+- Top-3 Genauigkeit: 50.0%
+- Durchschnittlicher Positionsfehler: 6.3
+
+### 2025 Canadian Grand Prix
+- Gesamt-Score: 13.2%
+- Exakte Genauigkeit: 5.0%
+- Genauigkeit ±3 Positionen: 25.0%
+- Top-3 Genauigkeit: 0.0%
+- Durchschnittlicher Positionsfehler: 8.0
+
+### 2025 Austrian Grand Prix
+- Gesamt-Score: 14.6%
+- Exakte Genauigkeit: 5.0%
+- Genauigkeit ±3 Positionen: 30.0%
+- Top-3 Genauigkeit: 0.0%
+- Durchschnittlicher Positionsfehler: 7.2
+
+### 2025 British Grand Prix
+- Gesamt-Score: 17.1%
+- Exakte Genauigkeit: 10.0%
+- Genauigkeit ±3 Positionen: 30.0%
+- Top-3 Genauigkeit: 0.0%
+- Durchschnittlicher Positionsfehler: 5.8
+
+## LERNERKENNTNISSE UND VERBESSERUNGSVORSCHLÄGE
+
+### 🚨 HOHE PRIORITÄT
+- Sehr niedrige exakte Genauigkeit (5.0%). Modell benötigt Überarbeitung.
+  Empfohlene Aktion: model_retraining
+- Sehr niedrige exakte Genauigkeit (5.0%). Modell benötigt Überarbeitung.
+  Empfohlene Aktion: model_retraining
+- Sehr niedrige exakte Genauigkeit (5.0%). Modell benötigt Überarbeitung.
+  Empfohlene Aktion: model_retraining
+
+### ⚠️ MITTLERE PRIORITÄT
+- Schlechte Wahrscheinlichkeits-Kalibrierung (Fehler: 0.45). Wahrscheinlichkeiten sind unzuverlässig.
+  Empfohlene Aktion: probability_recalibration
+- Schlechte Wahrscheinlichkeits-Kalibrierung (Fehler: 0.40). Wahrscheinlichkeiten sind unzuverlässig.
+  Empfohlene Aktion: probability_recalibration
+- Schlechte Wahrscheinlichkeits-Kalibrierung (Fehler: 0.56). Wahrscheinlichkeiten sind unzuverlässig.
+  Empfohlene Aktion: probability_recalibration
+- Schlechte Wahrscheinlichkeits-Kalibrierung (Fehler: 0.52). Wahrscheinlichkeiten sind unzuverlässig.
+  Empfohlene Aktion: probability_recalibration
+- Schlechte Wahrscheinlichkeits-Kalibrierung (Fehler: 0.46). Wahrscheinlichkeiten sind unzuverlässig.
+  Empfohlene Aktion: probability_recalibration
+
+## KONKRETE VERBESSERUNGSEMPFEHLUNGEN
+- Modell-Features überarbeiten: Aktuelle exakte Genauigkeit zu niedrig
+- Mehr historische Daten für Training verwenden
+- Feature Engineering verbessern (Wetter, Streckencharakteristika, etc.)
+- Wahrscheinlichkeits-Kalibrierung implementieren (z.B. Platt Scaling)
+- Unsicherheitsschätzung in Vorhersagen integrieren
+- Dringendes Model-Retraining erforderlich - mehrere Rennen mit schlechter Performance

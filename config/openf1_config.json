@@ -1,0 +1,179 @@
+{
+  "rate_limit_seconds": 0.5,
+  "timeout_seconds": 30,
+  "max_retries": 3,
+  "retry_delay_seconds": 1,
+  "cache_enabled": true,
+  "cache_duration_minutes": 60,
+  "output_formats": ["json", "csv"],
+  "data_sources": {
+    "car_data": {
+      "enabled": true,
+      "sample_rate_hz": 3.7,
+      "fields": [
+        "brake",
+        "date",
+        "driver_number",
+        "drs",
+        "n_gear",
+        "rpm",
+        "speed",
+        "throttle"
+      ]
+    },
+    "drivers": {
+      "enabled": true,
+      "fields": [
+        "broadcast_name",
+        "country_code",
+        "driver_number",
+        "first_name",
+        "full_name",
+        "headshot_url",
+        "last_name",
+        "name_acronym",
+        "team_colour",
+        "team_name"
+      ]
+    },
+    "intervals": {
+      "enabled": true,
+      "fields": [
+        "date",
+        "driver_number",
+        "gap_to_leader",
+        "interval"
+      ]
+    },
+    "laps": {
+      "enabled": true,
+      "fields": [
+        "date_start",
+        "driver_number",
+        "duration_sector_1",
+        "duration_sector_2",
+        "duration_sector_3",
+        "lap_duration",
+        "lap_number",
+        "segments_sector_1",
+        "segments_sector_2",
+        "segments_sector_3"
+      ]
+    },
+    "meetings": {
+      "enabled": true,
+      "fields": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_name",
+        "date_start",
+        "gmt_offset",
+        "location",
+        "meeting_name",
+        "meeting_official_name",
+        "year"
+      ]
+    },
+    "pit": {
+      "enabled": true,
+      "fields": [
+        "date",
+        "driver_number",
+        "lap_number",
+        "pit_duration"
+      ]
+    },
+    "position": {
+      "enabled": true,
+      "fields": [
+        "date",
+        "driver_number",
+        "position"
+      ]
+    },
+    "race_control": {
+      "enabled": true,
+      "fields": [
+        "category",
+        "date",
+        "flag",
+        "lap_number",
+        "message",
+        "scope"
+      ]
+    },
+    "sessions": {
+      "enabled": true,
+      "fields": [
+        "circuit_key",
+        "circuit_short_name",
+        "country_code",
+        "country_name",
+        "date_end",
+        "date_start",
+        "gmt_offset",
+        "location",
+        "session_name",
+        "session_type",
+        "year"
+      ]
+    },
+    "stints": {
+      "enabled": true,
+      "fields": [
+        "compound",
+        "driver_number",
+        "lap_end",
+        "lap_start",
+        "stint_number",
+        "tyre_age_at_start"
+      ]
+    },
+    "team_radio": {
+      "enabled": true,
+      "fields": [
+        "date",
+        "driver_number",
+        "recording_url"
+      ]
+    },
+    "weather": {
+      "enabled": true,
+      "fields": [
+        "air_temperature",
+        "date",
+        "humidity",
+        "pressure",
+        "rainfall",
+        "track_temperature",
+        "wind_direction",
+        "wind_speed"
+      ]
+    }
+  },
+  "output_paths": {
+    "cache": "data/cache/openf1",
+    "raw_data": "data/raw/openf1",
+    "processed_data": "data/processed/openf1"
+  },
+  "integration": {
+    "auto_collect_enabled": true,
+    "collect_after_session_minutes": 30,
+    "collect_data_types": [
+      "drivers",
+      "positions",
+      "laps",
+      "intervals",
+      "pit_stops",
+      "stints",
+      "weather",
+      "race_control"
+    ],
+    "telemetry_collection": {
+      "enabled": false,
+      "selected_drivers": [],
+      "sample_interval_seconds": 10
+    }
+  }
+}

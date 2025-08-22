@@ -73,7 +73,7 @@ def load_best_odds():
 def load_top_value_bets():
     """Load top value bets for Streamlit dashboard"""
     try:
-        bets_file = "data/live/top_value_bets.csv"
+        bets_file = "data/live/betting_recommendations.csv"
         if os.path.exists(bets_file):
             return pd.read_csv(bets_file)
     except Exception as e:
@@ -102,7 +102,7 @@ def load_race_countdown():
     return "Race information not available"
 
 try:
-    from ml import value_bet_calculator, betting_strategy
+    from ml import enhanced_value_bet_calculator, betting_strategy
     from utils.prediction_exporter import F1PredictionExporter
 except ImportError:
     # Fallback if imports fail
@@ -116,7 +116,7 @@ RACE = "Spanish Grand Prix"
 RACE_FILE = "Spanish_Grand_Prix_full"
 PRED_FILE = f"data/live/predicted_probabilities_{YEAR}_{RACE_FILE}.csv"
 BETTING_FILE = "data/live/betting_recommendations.csv"
-ODDS_FILE = "data/live/sample_odds.csv"
+ODDS_FILE = "data/live/betpanda_odds.csv"
 
 st.set_page_config(page_title="F1 PredictPro Live Dashboard", layout="wide")
 
@@ -125,9 +125,9 @@ if 'last_update' not in st.session_state:
     st.session_state.last_update = datetime.now()
 
 # Add refresh controls in sidebar
-st.sidebar.markdown("### 🔄 Live Updates")
+st.sidebar.markdown("### [REFRESH] Live Updates")
 auto_refresh = st.sidebar.checkbox("Auto-refresh (30s)", value=True)
-if st.sidebar.button("🔄 Refresh Now"):
+if st.sidebar.button("[REFRESH] Refresh Now"):
     st.session_state.last_update = datetime.now()
     st.rerun()
 
@@ -136,24 +136,24 @@ if auto_refresh and (datetime.now() - st.session_state.last_update).seconds > 30
     st.session_state.last_update = datetime.now()
     st.rerun()
 
-# 📥 Load data
+# [DOWNLOAD] Load data
 if not os.path.exists(PRED_FILE):
-    st.error(f"❌ File not found: {PRED_FILE}")
+    st.error(f"[ERROR] File not found: {PRED_FILE}")
     st.stop()
 
 df = pd.read_csv(PRED_FILE)
 
 # Sidebar for Navigation
-st.sidebar.title("🏎️ F1 PredictPro")
-page = st.sidebar.selectbox("Navigation", ["🏁 Dashboard", "📊 Driver Analysis", "💰 Betting Recommendations", "📈 Probabilities"])
+st.sidebar.title("[F1] F1 PredictPro")
+page = st.sidebar.selectbox("Navigation", ["[RACE] Dashboard", "[CHART] Driver Analysis", "[MONEY] Betting Recommendations", "[TREND] Probabilities"])
 
 def main_dashboard():
-    st.title("🏎️ F1 PredictPro Dashboard")
+    st.title("[F1] F1 PredictPro Dashboard")
     st.markdown("### Welcome to the Ultimate F1 Prediction & Betting Analysis Platform")
     
     # Live Race Information Section
     st.markdown("---")
-    st.markdown("## 🏁 Next Race Information")
+    st.markdown("## [RACE] Next Race Information")
     
     try:
         next_race = load_next_race_info()
@@ -191,39 +191,20 @@ def main_dashboard():
                          
                          st.markdown(live_countdown)
                          
-                         # Add JavaScript for real-time countdown
-                         race_timestamp = int(race_time.timestamp() * 1000)
-                         st.markdown(f"""
-                         <div id="countdown-timer" style="font-size: 18px; font-weight: bold; color: #ff6b6b;"></div>
-                         <script>
-                         function updateCountdown() {{
-                             const raceTime = {race_timestamp};
-                             const now = new Date().getTime();
-                             const distance = raceTime - now;
-                             
-                             if (distance > 0) {{
-                                 const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                                 const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                                 
-                                 let display = "";
-                                 if (days > 0) display = days + "d " + hours + "h " + minutes + "m " + seconds + "s";
-                                 else if (hours > 0) display = hours + "h " + minutes + "m " + seconds + "s";
-                                 else display = minutes + "m " + seconds + "s";
-                                 
-                                 document.getElementById("countdown-timer").innerHTML = "🏁 " + display + " until race!";
-                             }} else {{
-                                 document.getElementById("countdown-timer").innerHTML = "🏁 Race has started!";
-                             }}
-                         }}
+                         # Auto-refresh countdown every 30 seconds
+                         if 'last_refresh' not in st.session_state:
+                             st.session_state.last_refresh = time.time()
                          
-                         updateCountdown();
-                         setInterval(updateCountdown, 1000);
-                         </script>
-                         """, unsafe_allow_html=True)
+                         current_time = time.time()
+                         if current_time - st.session_state.last_refresh > 30:
+                             st.session_state.last_refresh = current_time
+                             st.rerun()
+                         
+                         # Add a refresh button for manual updates
+                         if st.button("[REFRESH] Refresh Countdown", key="refresh_countdown"):
+                             st.rerun()
                      else:
-                         st.markdown("**🏁 Race has started!**")
+                         st.markdown("**[RACE] Race has started!**")
                  else:
                      st.markdown(f"**{countdown}**")
              except Exception as e:
@@ -231,17 +212,17 @@ def main_dashboard():
                  st.sidebar.error(f"Countdown error: {str(e)}")
         
         # Best Odds Section
-        st.markdown("### 💰 Best Current Odds")
+        st.markdown("### [MONEY] Best Current Odds")
         best_odds = load_best_odds()
-        if not best_odds.empty:
+        if len(best_odds) > 0:
             st.dataframe(best_odds, use_container_width=True)
         else:
             st.info("Odds will be available closer to race time")
         
         # Top Value Bets
-        st.markdown("### 🎯 Top Value Bets")
+        st.markdown("### [TARGET] Top Value Bets")
         value_bets = load_top_value_bets()
-        if not value_bets.empty:
+        if len(value_bets) > 0:
             st.dataframe(value_bets, use_container_width=True)
         else:
             st.info("Value bet analysis will be available when odds are loaded")
@@ -263,25 +244,25 @@ def main_dashboard():
     with col4:
         st.metric("Active Strategies", "5")
 
-if page == "🏁 Dashboard":
+if page == "[RACE] Dashboard":
     main_dashboard()
 
-elif page == "📊 Driver Analysis":
-    st.title(f"📊 F1 Driver Analysis - {RACE} {YEAR}")
+elif page == "[CHART] Driver Analysis":
+    st.title(f"[CHART] F1 Driver Analysis - {RACE} {YEAR}")
     
-    # 🎯 Driver Selection
+    # [TARGET] Driver Selection
     drivers = sorted(df["driver"].unique())
-    selected_driver = st.selectbox("🏎️ Select Driver:", drivers)
+    selected_driver = st.selectbox("[F1] Select Driver:", drivers)
     
-    # 📊 Get probabilities
+    # [CHART] Get probabilities
     driver_data = df[df["driver"] == selected_driver].sort_values("position")
     driver_data["probability"] = driver_data["probability"].round(2)
     
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        # 📋 Table
-        st.markdown(f"### 📊 Position Probabilities for **{selected_driver}**")
+        # [CLIPBOARD] Table
+        st.markdown(f"### [CHART] Position Probabilities for **{selected_driver}**")
         display_data = driver_data[["position", "probability"]].rename(columns={
             "position": "Position",
             "probability": "Probability (%)"
@@ -290,31 +271,31 @@ elif page == "📊 Driver Analysis":
         
         # Highlight Top 3 probabilities
         top3_data = driver_data[driver_data["position"].isin([1, 2, 3])]
-        if not top3_data.empty:
-            st.markdown("### 🏆 Top 3 Chances")
+        if len(top3_data) > 0:
+            st.markdown("### [TROPHY] Top 3 Chances")
             for _, row in top3_data.iterrows():
                 st.metric(f"P{int(row['position'])}", f"{row['probability']:.1f}%")
     
     with col2:
-        # 📈 Chart
-        st.markdown("### 📈 Probability Distribution")
+        # [TREND] Chart
+        st.markdown("### [TREND] Probability Distribution")
         chart_data = driver_data.set_index("position")["probability"]
         st.bar_chart(chart_data, use_container_width=True)
         
         # Additional Statistics
-        st.markdown("### 📊 Statistics")
+        st.markdown("### [CHART] Statistics")
         st.metric("Highest Probability", f"{driver_data['probability'].max():.1f}%")
         best_position = driver_data.loc[driver_data['probability'].idxmax(), 'position']
         st.metric("Most Likely Position", f"P{int(best_position)}")
         top10_prob = driver_data[driver_data['position'] <= 10]['probability'].sum()
         st.metric("Top 10 Probability", f"{top10_prob:.1f}%")
 
-elif page == "💰 Betting Recommendations":
-    st.title(f"💰 Betting Recommendations - {RACE} {YEAR}")
+elif page == "[MONEY] Betting Recommendations":
+    st.title(f"[MONEY] Betting Recommendations - {RACE} {YEAR}")
     
     # Generate betting recommendations if not available
     if not os.path.exists(BETTING_FILE):
-        st.warning("⚠️ Generating betting recommendations...")
+        st.warning("[WARNING] Generating betting recommendations...")
         
         # Create sample odds if not available
         if not os.path.exists(ODDS_FILE):
@@ -324,36 +305,36 @@ elif page == "💰 Betting Recommendations":
         try:
             from ml.betting_strategy import generate_betting_recommendations
             betting_df = generate_betting_recommendations(PRED_FILE, ODDS_FILE, BETTING_FILE)
-            st.success("✅ Betting recommendations generated successfully!")
+            st.success("[OK] Betting recommendations generated successfully!")
         except Exception as e:
-            st.error(f"❌ Error generating recommendations: {e}")
+            st.error(f"[ERROR] Error generating recommendations: {e}")
             st.stop()
     else:
         betting_df = pd.read_csv(BETTING_FILE)
     
     # Filter options
-    st.sidebar.markdown("### 🎛️ Filters")
+    st.sidebar.markdown("### [CONTROL] Filters")
     show_only_recommended = st.sidebar.checkbox("Show only recommended bets", value=True)
     min_ev_filter = st.sidebar.slider("Minimum Expected Value", -5.0, 10.0, 0.0, 0.1)
     
     # Filter data
     filtered_df = betting_df.copy()
     if show_only_recommended:
-        filtered_df = filtered_df[filtered_df['bet_recommendation'] == 'Ja']
+        filtered_df = filtered_df[filtered_df['recommendation'] == 'CONSIDER']
     filtered_df = filtered_df[filtered_df['expected_value'] >= min_ev_filter]
     
     # Main table
-    st.markdown("### 📊 Betting Recommendations Overview")
+    st.markdown("### [CHART] Betting Recommendations Overview")
     
     if len(filtered_df) > 0:
         # Format table for better display
         display_df = filtered_df[[
-            'driver', 'position', 'odds', 'probability_pct', 
-            'expected_value', 'bet_recommendation', 'stake', 'potential_profit'
+            'driver', 'odds', 'probability', 
+            'expected_value', 'recommendation', 'stake', 'profit_potential'
         ]].copy()
         
         display_df.columns = [
-            'Driver', 'Position', 'Odds', 'Probability (%)', 
+            'Driver', 'Odds', 'Probability (%)', 
             'Expected Value (€)', 'Recommendation', 'Stake (€)', 'Potential Profit (€)'
         ]
         
@@ -370,7 +351,7 @@ elif page == "💰 Betting Recommendations":
         # Statistics
         col1, col2, col3, col4 = st.columns(4)
         
-        recommended_bets = filtered_df[filtered_df['bet_recommendation'] == 'Ja']
+        recommended_bets = filtered_df[filtered_df['recommendation'] == 'CONSIDER']
         
         with col1:
             st.metric("Recommended Bets", len(recommended_bets))
@@ -378,7 +359,7 @@ elif page == "💰 Betting Recommendations":
             total_stake = recommended_bets['stake'].sum()
             st.metric("Total Stake", f"{total_stake:.2f}€")
         with col3:
-            total_potential = recommended_bets['potential_profit'].sum()
+            total_potential = recommended_bets['profit_potential'].sum()
             st.metric("Potential Profit", f"{total_potential:.2f}€")
         with col4:
             total_ev = recommended_bets['expected_value'].sum()
@@ -387,7 +368,7 @@ elif page == "💰 Betting Recommendations":
         # Download button
         csv_data = filtered_df.to_csv(index=False)
         st.download_button(
-            label="📥 Download CSV",
+            label="[DOWNLOAD] Download CSV",
             data=csv_data,
             file_name=f"betting_recommendations_{RACE}_{YEAR}.csv",
             mime="text/csv"
@@ -396,25 +377,25 @@ elif page == "💰 Betting Recommendations":
         # Highlight best bet
         if len(recommended_bets) > 0:
             best_bet = recommended_bets.loc[recommended_bets['expected_value'].idxmax()]
-            st.markdown("### 🏆 Best Betting Recommendation")
+            st.markdown("### [TROPHY] Best Betting Recommendation")
             
             col1, col2, col3 = st.columns(3)
             with col1:
-                st.metric("Driver", f"{best_bet['driver']} ({best_bet['position']})")
+                st.metric("Driver", f"{best_bet['driver']}")
             with col2:
                 st.metric("Odds", f"{best_bet['odds']:.2f}")
             with col3:
                 st.metric("Expected Value", f"{best_bet['expected_value']:.2f}€")
     else:
-        st.warning("⚠️ No bets match the current filter criteria.")
+        st.warning("[WARNING] No bets match the current filter criteria.")
 
-elif page == "📈 Probabilities":
-    st.title(f"📈 All Driver Probabilities - {RACE} {YEAR}")
+elif page == "[TREND] Probabilities":
+    st.title(f"[TREND] All Driver Probabilities - {RACE} {YEAR}")
     
     # Position Filter
     positions = sorted(df['position'].unique())
     selected_positions = st.multiselect(
-        "🎯 Select Positions:", 
+        "[TARGET] Select Positions:", 
         positions, 
         default=[1, 2, 3, 4, 5]
     )
@@ -431,11 +412,11 @@ elif page == "📈 Probabilities":
         if 1 in selected_positions:
             pivot_data = pivot_data.sort_values(1, ascending=False)
         
-        st.markdown("### 📊 Probability Matrix")
+        st.markdown("### [CHART] Probability Matrix")
         st.dataframe(pivot_data, use_container_width=True)
         
         # Heatmap-like visualization
-        st.markdown("### 🔥 Top Candidates per Position")
+        st.markdown("### [HOT] Top Candidates per Position")
         
         cols = st.columns(min(len(selected_positions), 5))
         for i, pos in enumerate(selected_positions[:5]):
@@ -446,7 +427,7 @@ elif page == "📈 Probabilities":
                     st.write(f"{row['driver']}: {row['probability']:.1f}%")
         
         # Export Options
-        st.subheader("📦 Export Options")
+        st.subheader("[PACKAGE] Export Options")
         
         col1, col2, col3 = st.columns(3)
         
@@ -455,7 +436,7 @@ elif page == "📈 Probabilities":
             csv_buffer = io.StringIO()
             filtered_data.to_csv(csv_buffer, index=False)
             st.download_button(
-                label="📥 Download CSV",
+                label="[DOWNLOAD] Download CSV",
                 data=csv_buffer.getvalue(),
                 file_name=f"probabilities_{RACE.replace(' ', '_')}.csv",
                 mime="text/csv",
@@ -464,7 +445,7 @@ elif page == "📈 Probabilities":
         
         with col2:
             # Formatted export for friends
-            if st.button("📄 Formatted Export", use_container_width=True):
+            if st.button("[DOC] Formatted Export", use_container_width=True):
                 if F1PredictionExporter:
                     try:
                         exporter = F1PredictionExporter()
@@ -490,21 +471,21 @@ elif page == "📈 Probabilities":
                                 formatted_csv = f.read()
                             
                             st.download_button(
-                                label="📥 Download Formatted CSV",
+                                label="[DOWNLOAD] Download Formatted CSV",
                                 data=formatted_csv,
                                 file_name=f"F1_Prediction_{RACE.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d')}.csv",
                                 mime="text/csv"
                             )
-                            st.success("✅ Formatted export created!")
+                            st.success("[OK] Formatted export created!")
                         
                     except Exception as e:
-                        st.error(f"❌ Export error: {e}")
+                        st.error(f"[ERROR] Export error: {e}")
                 else:
-                    st.error("❌ Export module not available")
+                    st.error("[ERROR] Export module not available")
         
         with col3:
             # PDF Export (if available)
-            if st.button("📄 PDF Export", use_container_width=True):
+            if st.button("[DOC] PDF Export", use_container_width=True):
                 if F1PredictionExporter:
                     try:
                         exporter = F1PredictionExporter()
@@ -530,18 +511,18 @@ elif page == "📈 Probabilities":
                                 pdf_data = f.read()
                             
                             st.download_button(
-                                label="📥 Download PDF",
+                                label="[DOWNLOAD] Download PDF",
                                 data=pdf_data,
                                 file_name=f"F1_Prediction_{RACE.replace(' ', '_')}_{datetime.now().strftime('%Y%m%d')}.pdf",
                                 mime="application/pdf"
                             )
-                            st.success("✅ PDF created!")
+                            st.success("[OK] PDF created!")
                         else:
-                            st.error("❌ PDF could not be created")
+                            st.error("[ERROR] PDF could not be created")
                         
                     except Exception as e:
-                        st.error(f"❌ PDF export error: {e}")
+                        st.error(f"[ERROR] PDF export error: {e}")
                 else:
-                    st.error("❌ Export module not available")
+                    st.error("[ERROR] Export module not available")
     else:
-        st.warning("⚠️ Please select at least one position.")
+        st.warning("[WARNING] Please select at least one position.")

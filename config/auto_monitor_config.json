@@ -1,0 +1,30 @@
+{
+  "check_interval_hours": 6,
+  "odds_fetch_hours_before_race": [
+    72,
+    48,
+    24,
+    12,
+    6,
+    2
+  ],
+  "prediction_hours_before_race": 24,
+  "auto_process_results_hours_after_race": 4,
+  "betting_amount": 10,
+  "min_expected_value": 0.05,
+  "max_bets_per_race": 8,
+  "odds_sources": [
+    "stake",
+    "bet365",
+    "pinnacle"
+  ],
+  "notification_webhook": null,
+  "enable_auto_betting": false,
+  "data_paths": {
+    "live_odds": "data/live/current_odds.csv",
+    "predictions": "data/live/next_race_predictions.csv",
+    "recommendations": "data/live/betting_recommendations.csv",
+    "race_schedule": "data/live/race_schedule.json",
+    "processed_races": "data/processed/processed_races.json"
+  }
+}

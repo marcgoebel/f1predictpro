@@ -1,0 +1,27 @@
+# F1 PREDICTION ACCURACY ANALYSIS REPORT
+Generated: 2025-07-30 09:20:06
+
+============================================================
+
+## ZUSAMMENFASSUNG
+- Analysierte Rennen: 1
+- Durchschnittlicher Genauigkeitsscore: 76.9%
+
+## DETAILLIERTE ERGEBNISSE
+
+### 2025 Spanish Grand Prix
+- Gesamt-Score: 76.9%
+- Exakte Genauigkeit: 40.0%
+- Genauigkeit ±3 Positionen: 100.0%
+- Top-3 Genauigkeit: 100.0%
+- Durchschnittlicher Positionsfehler: 0.6
+
+## LERNERKENNTNISSE UND VERBESSERUNGSVORSCHLÄGE
+
+### ⚠️ MITTLERE PRIORITÄT
+- Schlechte Wahrscheinlichkeits-Kalibrierung (Fehler: 0.34). Wahrscheinlichkeiten sind unzuverlässig.
+  Empfohlene Aktion: probability_recalibration
+
+## KONKRETE VERBESSERUNGSEMPFEHLUNGEN
+- Wahrscheinlichkeits-Kalibrierung implementieren (z.B. Platt Scaling)
+- Unsicherheitsschätzung in Vorhersagen integrieren

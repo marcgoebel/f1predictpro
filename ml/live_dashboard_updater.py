@@ -10,7 +10,7 @@ import logging
 # Import our modules
 from auto_race_monitor import AutoF1RaceMonitor
 from betting_strategy import generate_betting_recommendations
-from value_bet_calculator import calculate_value_bets
+from enhanced_value_bet_calculator import EnhancedValueBetCalculator
 
 # Configure logging
 logging.basicConfig(
@@ -44,7 +44,7 @@ class LiveDashboardUpdater:
             "next_race_info": "data/live/next_race_info.json",
             "live_recommendations": "data/live/betting_recommendations.csv",
             "best_odds": "data/live/best_odds_summary.csv",
-            "value_bets": "data/live/top_value_bets.csv",
+            "value_bets": "data/live/betting_recommendations.csv",
             "race_countdown": "data/live/race_countdown.json"
         }
     
@@ -300,7 +300,7 @@ def load_best_odds():
 def load_top_value_bets():
     """Load top value bets for Streamlit dashboard"""
     try:
-        bets_file = "data/live/top_value_bets.csv"
+        bets_file = "data/live/betting_recommendations.csv"
         if os.path.exists(bets_file):
             return pd.read_csv(bets_file)
     except Exception as e:

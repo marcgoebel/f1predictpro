@@ -5,3 +5,12 @@ streamlit
 python-dotenv
 matplotlib
 shap
+
+# Supabase Integration
+supabase==2.16.0
+psycopg2-binary==2.9.9
+
+# Additional APIs
+requests
+plotly
+seaborn

@@ -1,0 +1,2 @@
+race_name,timestamp,overall_score,exact_accuracy,within_3_accuracy,top3_accuracy,calibration_score
+2025 Spanish Grand Prix,2025-07-30T09:20:06.714088,0.769225,0.4,1.0,1.0,0.6615000000000001

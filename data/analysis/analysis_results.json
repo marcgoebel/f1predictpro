@@ -1,0 +1,235 @@
+[
+  {
+    "race_name": "2025 Spanish Grand Prix",
+    "timestamp": "2025-07-30T09:20:06.714088",
+    "total_drivers": 20,
+    "position_accuracy": {
+      "exact_accuracy": 0.4,
+      "within_1_accuracy": 1.0,
+      "within_2_accuracy": 1.0,
+      "within_3_accuracy": 1.0,
+      "top3_accuracy": 1.0,
+      "top10_accuracy": 1.0,
+      "mean_position_error": 0.6,
+      "median_position_error": 1.0
+    },
+    "probability_calibration": {
+      "average_calibration_error": 0.3384999999999999,
+      "max_calibration_error": 0.72,
+      "calibration_score": 0.6615000000000001,
+      "calibration_data": [
+        {
+          "bin": 0,
+          "avg_probability": 0.06,
+          "actual_success_rate": 0.4,
+          "calibration_error": 0.34
+        },
+        {
+          "bin": 1,
+          "avg_probability": 0.15,
+          "actual_success_rate": 0.3333333333333333,
+          "calibration_error": 0.18333333333333332
+        },
+        {
+          "bin": 2,
+          "avg_probability": 0.235,
+          "actual_success_rate": 0.5,
+          "calibration_error": 0.265
+        },
+        {
+          "bin": 3,
+          "avg_probability": 0.31666666666666665,
+          "actual_success_rate": 0.3333333333333333,
+          "calibration_error": 0.016666666666666663
+        },
+        {
+          "bin": 4,
+          "avg_probability": 0.4,
+          "actual_success_rate": 0.5,
+          "calibration_error": 0.09999999999999998
+        },
+        {
+          "bin": 5,
+          "avg_probability": 0.48,
+          "actual_success_rate": 0.0,
+          "calibration_error": 0.48
+        },
+        {
+          "bin": 6,
+          "avg_probability": 0.55,
+          "actual_success_rate": 1.0,
+          "calibration_error": 0.44999999999999996
+        },
+        {
+          "bin": 7,
+          "avg_probability": 0.68,
+          "actual_success_rate": 0.0,
+          "calibration_error": 0.68
+        },
+        {
+          "bin": 8,
+          "avg_probability": 0.72,
+          "actual_success_rate": 0.0,
+          "calibration_error": 0.72
+        },
+        {
+          "bin": 9,
+          "avg_probability": 0.85,
+          "actual_success_rate": 1.0,
+          "calibration_error": 0.15000000000000002
+        }
+      ]
+    },
+    "top_predictions": {
+      "top_1_precision": 1.0,
+      "top_1_recall": 1.0,
+      "top_3_precision": 1.0,
+      "top_3_recall": 1.0,
+      "top_5_precision": 0.8,
+      "top_5_recall": 0.8,
+      "top_10_precision": 1.0,
+      "top_10_recall": 1.0
+    },
+    "error_patterns": {
+      "worst_predictions": [
+        {
+          "driver": "LEC",
+          "position": 3,
+          "Position": 2,
+          "position_error": 1
+        },
+        {
+          "driver": "NOR",
+          "position": 2,
+          "Position": 3,
+          "position_error": 1
+        },
+        {
+          "driver": "RUS",
+          "position": 5,
+          "Position": 6,
+          "position_error": 1
+        },
+        {
+          "driver": "HAM",
+          "position": 6,
+          "Position": 5,
+          "position_error": 1
+        },
+        {
+          "driver": "ALO",
+          "position": 8,
+          "Position": 9,
+          "position_error": 1
+        }
+      ],
+      "overestimation_rate": 0.3,
+      "underestimation_rate": 0.3,
+      "avg_overestimation_error": 1.0,
+      "avg_underestimation_error": 1.0,
+      "position_error_distribution": [
+        {
+          "position": 1,
+          "mean": 0.0,
+          "count": 1
+        },
+        {
+          "position": 2,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 3,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 4,
+          "mean": 0.0,
+          "count": 1
+        },
+        {
+          "position": 5,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 6,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 7,
+          "mean": 0.0,
+          "count": 1
+        },
+        {
+          "position": 8,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 9,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 10,
+          "mean": 0.0,
+          "count": 1
+        },
+        {
+          "position": 11,
+          "mean": 0.0,
+          "count": 1
+        },
+        {
+          "position": 12,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 13,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 14,
+          "mean": 0.0,
+          "count": 1
+        },
+        {
+          "position": 15,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 16,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 17,
+          "mean": 0.0,
+          "count": 1
+        },
+        {
+          "position": 18,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 19,
+          "mean": 1.0,
+          "count": 1
+        },
+        {
+          "position": 20,
+          "mean": 0.0,
+          "count": 1
+        }
+      ]
+    },
+    "overall_score": 0.769225
+  }
+]
